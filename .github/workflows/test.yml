@@ -21,19 +21,20 @@ jobs:
       - name: Get action output
         run: echo "${{ fromJson(steps.var.outputs.data).head_branch }}"
 
-      - name: Cut changelog
+      - name: Get changelog
         id: changelog
         run: |
-          MY_STRING=$(sed -n '/v2.3.3/,/v2.2.0/p' CHANGELOG.md)
-          echo "MY_STRING<<EOF" >> $GITHUB_ENV
-          echo "$MY_STRING" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          CHANGELOG=$(sed -n '/v2.3.3/,/v2.2.0/p' CHANGELOG.md)
+          CHANGELOG="${CHANGELOG//'%'/'%25'}"
+          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
+          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
+          echo "::set-output name=content::$CHANGELOG"
 
       - name: Slack Markdown Converter
         id: slack-md-converter
         uses: LoveToKnow/slackify-markdown-action@v1.0.0
         with:
-          text: ${{ env.MY_STRING }}
+          text: ${{ steps.changelog.outputs.content }}
 
       - name: Send Slack release message
         uses: archive/github-actions-slack@master
