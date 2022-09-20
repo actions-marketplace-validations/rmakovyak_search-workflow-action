@@ -24,7 +24,7 @@ jobs:
       - name: Cut changelog
         id: changelog
         run: |
-          CHANGELOG=$(cat CHANGELOG.md | sed -n '/v2.3.3/,/v2.2.0/p')
+          CHANGELOG=$(sed -n '/v2.3.3/,/v2.2.0/p' CHANGELOG.md)
           echo "::set-output name=CHANGELOG::$CHANGELOG"
 
       - name: Send Slack release message
