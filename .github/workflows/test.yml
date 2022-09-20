@@ -29,6 +29,12 @@ jobs:
           echo "$MY_STRING" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
+      - name: Slack Markdown Converter
+        id: slack-md-converter
+        uses: LoveToKnow/slackify-markdown-action@v1.0.0
+        with:
+          text: ${{ env.MY_STRING }}
+
       - name: Send Slack release message
         uses: archive/github-actions-slack@master
         id: send-message
@@ -36,4 +42,4 @@ jobs:
           slack-function: send-message
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_TOKEN }}
           slack-channel: bot-test-channel
-          slack-text: ${{ env.MY_STRING }}
+          slack-text: ${{ steps.slack-md-converter.outputs.text }}
