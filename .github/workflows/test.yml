@@ -21,11 +21,11 @@ jobs:
       - name: Get action output
         run: echo "${{ fromJson(steps.var.outputs.data).head_branch }}"
 
-      - name: Cut changelog
-        id: changelog
-        run: |
-          CHANGELOG=$(cat CHANGELOG.md | sed -n '/${{github.ref_name}}/,/${{ fromJson(steps.last-version.outputs.data).head_branch }}/p')
-          echo "::set-output name=CHANGELOG::$CHANGELOG"
+      # - name: Cut changelog
+      #   id: changelog
+      #   run: |
+      #     CHANGELOG=$()
+      #     echo "::set-output name=CHANGELOG::$CHANGELOG"
 
       - name: Send Slack release message
         uses: archive/github-actions-slack@master
@@ -34,4 +34,4 @@ jobs:
           slack-function: send-message
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_TOKEN }}
           slack-channel: bot-test-channel
-          slack-text: ${{ steps.changelog.outputs.CHANGELOG }}
+          slack-text: ${{ cat CHANGELOG.md | sed -n '/${{github.ref_name}}/,/${{ fromJson(steps.last-version.outputs.data).head_branch }}/p' }}
