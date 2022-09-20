@@ -24,8 +24,10 @@ jobs:
       - name: Cut changelog
         id: changelog
         run: |
-          CHANGELOG=$(sed -n '/v2.3.3/,/v2.2.0/p' CHANGELOG.md)
-          echo "::set-output name=CHANGELOG::$CHANGELOG"
+          MY_STRING=$(sed -n '/v2.3.3/,/v2.2.0/p' CHANGELOG.md)
+          echo "MY_STRING<<EOF" >> $GITHUB_ENV
+          echo "$MY_STRING" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Send Slack release message
         uses: archive/github-actions-slack@master
@@ -34,4 +36,4 @@ jobs:
           slack-function: send-message
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_TOKEN }}
           slack-channel: bot-test-channel
-          slack-text: ${{ steps.changelog.outputs.CHANGELOG }}
+          slack-text: ${{ env.MY_STRING }}
