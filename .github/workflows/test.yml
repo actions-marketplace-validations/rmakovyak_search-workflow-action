@@ -43,4 +43,4 @@ jobs:
           slack-function: send-message
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_TOKEN }}
           slack-channel: bot-test-channel
-          slack-text: ${{ steps.slack-md-converter.outputs.text }}
+          slack-text: 'Intelligence was deployed to production. \n Release notes are in thread.'
