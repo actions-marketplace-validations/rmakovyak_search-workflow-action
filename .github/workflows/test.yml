@@ -12,9 +12,10 @@ jobs:
         id: var
         uses: ./
         with:
-          owner: 'rmakovyak'
-          repo: 'search-workflow-action'
-          name: 'Test'
+          owner: 'scoutbeedev'
+          repo: 'react-intelligence'
+          event: 'workflow_dispatch'
+          name: 'Deploy to production'
           GITHUB_AUTH_TOKEN: ${{ secrets.GH_AUTH_TOKEN }}
 
       - name: Get action output
